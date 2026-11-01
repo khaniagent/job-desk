@@ -1,0 +1,12 @@
+{
+  "name": "Hanzala Mehmood",
+  "email": "hanzalazikriyan@gmail.com",
+  "portfolio": "https://wescaleupmarketing.com",
+  "years": "3+",
+  "client_line": "I have worked remotely and independently, including with a client in Australia",
+  "proven_skills": ["next.js","react","node.js","laravel","rest api","authentication","wordpress","woocommerce","api integration","ai","crm","saas","mysql","postgresql","html","css","javascript"],
+  "not_proven": ["typescript","django","python","elementor","gutenberg","liquid","go","golang","angular","vue","react native","ruby","java","aws","docker","kubernetes","graphql","c#",".net","php"],
+  "target_keywords": ["next.js","nextjs","react","node","full stack","full-stack","fullstack","wordpress","woocommerce","shopify","web developer","frontend","front-end","javascript","laravel","ai agent","saas"],
+  "avoid_keywords": ["senior staff","principal","director","head of","manager","unpaid","commission only","intern","react native","ios","android"],
+  "max_years_required": 5
+}

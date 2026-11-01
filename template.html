@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hanzala Job Desk</title>
+<style>
+:root{--bg:#f6f7f4;--s:#fff;--fg:#1b2420;--mute:#5b6a62;--line:#dde3dd;--acc:#0b6b4f;--accfg:#fff;--chip:#eef2ee;--warn:#8a5a0a}
+@media(prefers-color-scheme:dark){:root{--bg:#111815;--s:#18211d;--fg:#e8efe9;--mute:#9baba2;--line:#2a3731;--acc:#46c79a;--accfg:#06241a;--chip:#202c26;--warn:#e3b45c}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,sans-serif;padding:24px max(16px,env(safe-area-inset-left))}
+main{max-width:780px;margin:auto;display:grid;gap:14px}h1{margin:0;font-size:30px}
+.mute{color:var(--mute);font-size:14px}.job{background:var(--s);border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:8px;min-width:0}
+.job.done{opacity:.5}.top{display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap}.top div{min-width:0;flex:1 1 240px}
+h2{margin:0;font-size:18px;overflow-wrap:anywhere}a.open{background:var(--acc);color:var(--accfg);text-decoration:none;font-weight:600;padding:9px 14px;border-radius:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;font-size:13px}.chips span{background:var(--chip);padding:2px 9px;border-radius:99px}
+.us{font-weight:700;color:var(--acc)}.warn{color:var(--warn);font-size:14px}
+textarea{width:100%;box-sizing:border-box;min-height:190px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:9px;font:14px/1.5 system-ui}
+button{background:var(--chip);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:7px 12px;font-weight:600;cursor:pointer;margin-right:6px}
+</style></head><body><main>
+<header><h1>Hanzala Job Desk</h1><div class="mute">Updated __STAMP__ (refreshes every 3 hours). Applied today: <b id="cnt">0</b> / 10. A listing cannot prove a job is open this minute, so open the link first.</div></header>
+<label class="mute"><input type="checkbox" id="usonly"> Show US-company hints only</label>
+<div id="list" style="display:grid;gap:14px"></div></main>
+<script>
+const JOBS=__JOBS__;let st={};try{st=JSON.parse(localStorage.getItem("jd_st")||"{}")}catch(e){}
+const save=()=>{try{localStorage.setItem("jd_st",JSON.stringify(st))}catch(e){}};
+const esc=s=>{const d=document.createElement("div");d.textContent=s==null?"":s;return d.innerHTML};
+const today=new Date().toISOString().slice(0,10);
+function render(){const L=document.getElementById("list");L.innerHTML="";const us=document.getElementById("usonly").checked;let n=0;
+ JOBS.forEach(j=>{if(us&&!j.us)return;const done=st[j.id]===today;const a=document.createElement("article");a.className="job"+(st[j.id]?" done":"");
+ if(st[j.id]===today)n++;
+ a.innerHTML=`<div class="top"><div><h2>${esc(j.title)}</h2><div class="mute">${esc(j.company)} · ${esc(j.source)}</div></div><a class="open" target="_blank" rel="noopener" href="${esc(j.url)}">Open job page</a></div>
+ <div class="chips">${j.us?'<span class="us">US hint</span>':''}<span>${esc(j.pay)}</span><span>${esc(j.where)}</span><span>${esc(j.apply)}</span>${j.years?`<span>asks ${j.years}+ yrs</span>`:''}</div>
+ ${j.gaps.length?`<div class="warn">Not in your profile: ${esc(j.gaps.join(", "))}. The message says so honestly.</div>`:''}
+ <details><summary>Ready message</summary><textarea id="m${esc(j.id)}">${esc(j.msg)}</textarea><button data-c="${esc(j.id)}">Copy</button><button data-d="${esc(j.id)}">${st[j.id]?'Undo applied':'Mark applied'}</button></details>`;L.appendChild(a)});
+ document.getElementById("cnt").textContent=n}
+document.getElementById("usonly").onchange=render;
+document.addEventListener("click",e=>{const c=e.target.dataset.c,d=e.target.dataset.d;
+ if(c){const t=document.getElementById("m"+c);try{navigator.clipboard.writeText(t.value)}catch(_){t.select();document.execCommand("copy")}e.target.textContent="Copied"}
+ if(d){st[d]=st[d]?null:today;save();render()}});
+render();
+</script></body></html>
